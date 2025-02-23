@@ -4,11 +4,6 @@ import { Table } from "./component/Table";
 import { IAPIResponse, ICustomer } from "./types/globaltypes";
 import { useDebounce } from "./hooks/useDebounce";
 
-const person = {
-  name: "skillzo",
-  age: 26,
-};
-
 const base_url = import.meta.env.VITE_BASE_URL;
 function App() {
   const [data, setData] = useState<IAPIResponse<ICustomer[]> | null>(null);
