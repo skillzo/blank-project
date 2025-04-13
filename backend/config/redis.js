@@ -1,6 +1,6 @@
 const Redis = require("ioredis");
 
-const redisClient = new Redis(); // Connects to Redis at localhost:6379
+const redisClient = new Redis({ host: "localhost", port: 6379 });
 
 redisClient.on("error", (err) => {
   console.error("Redis Error:", err);
