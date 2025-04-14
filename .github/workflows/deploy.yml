@@ -39,5 +39,5 @@ jobs:
 
       - name: Deploy script to EC2 and run it
         run: |
-          scp -i private_key.pem -o StrictHostKeyChecking=no .deploy.sh ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "chmod +x .deploy.sh && ./deploy.sh"
+          scp -i private_key.pem -o StrictHostKeyChecking=no .deploy.sh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/blank-project/
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cd /home/ubuntu/blank-project && chmod +x .deploy.sh && ./deploy.sh"
