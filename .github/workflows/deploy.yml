@@ -10,12 +10,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd /home/ubuntu/blank-project
-            ./deploy.sh
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli  # Install AWS CLI
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region us-east-1  # Replace with your AWS region
+
+      - name: Set up SSH private key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa  # GitHub secret for SSH private key
+          chmod 600 ~/.ssh/id_rsa  # Make it secure
+
+      - name: Add EC2 to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts  # Ensure EC2's SSH fingerprint is known
+
+      - name: Run deploy script on EC2
+        run: |
+          EC2_IP="${{ secrets.EC2_HOST }}"  # Public IP or DNS of your EC2
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@$EC2_IP 'bash -s' < ./deploy.sh
