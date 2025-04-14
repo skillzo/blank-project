@@ -27,7 +27,19 @@ jobs:
 
       - name: Add EC2 to known hosts
         run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          touch ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts  # Ensure EC2's SSH fingerprint is known
+
+      # Wait for EC2 to be ready (Optional, if you expect delays)
+      - name: Wait for EC2 to be ready
+        run: |
+          while ! nc -zv ${{ secrets.EC2_HOST }} 22; do
+            echo "Waiting for EC2 to be ready..."
+            sleep 10
+          done
 
       - name: Run deploy script on EC2
         run: |
