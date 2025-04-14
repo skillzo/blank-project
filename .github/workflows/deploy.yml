@@ -13,10 +13,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up AWS CLI
+      - name: Install AWS CLI v2
         run: |
           sudo apt-get update
-          sudo apt-get install -y awscli  # Install AWS CLI
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download the installer
+          unzip awscliv2.zip  # Unzip the installer
+          sudo ./aws/install  # Install AWS CLI
+          aws --version  # Verify AWS CLI installation
+
+      - name: Configure AWS CLI
+        run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set region us-east-1  # Replace with your AWS region
