@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div className="container">
-      <p>This was updated by github actions</p>
+      <p>This was updated by github actions Again </p>
       {data && <h1>{data?.message}</h1>}
       {data?.data && <Table data={data?.data} />}
 
