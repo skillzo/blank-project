@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
 
-app.get("/customers/getall", async (req, res) => {
+app.get("/api/customers/getall", async (req, res) => {
   const { page = 1, page_size = 10 } = req.query;
   try {
     const cacheKey = `/customers/getall:page=${page}:page_size=${page_size}`;
