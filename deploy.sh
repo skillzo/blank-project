@@ -11,6 +11,7 @@ git pull origin main
 cd frontend
 npm install
 npm run build
+sudo chmod -R o+rx /home/ubuntu/blank-project/frontend
 
 # Start/Restart Express server
 cd ../backend
